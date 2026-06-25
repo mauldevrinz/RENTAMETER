@@ -1,6 +1,6 @@
 // ========================================
 // COMPONENTS / Navbar.js
-// Marketplace Navbar Template (Fixed Version)
+// Marketplace Navbar Template (Unified Mobile Menu)
 // ========================================
 
 import { useState, useEffect, useRef } from 'react'
@@ -9,10 +9,11 @@ import { useRouter } from 'next/router'
 
 export default function Navbar() {
   const [user, setUser] = useState(null)
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false) // Desktop profile dropdown
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false) // Mobile unified menu
   const router = useRouter()
   const dropdownRef = useRef(null)
+  const mobileMenuRef = useRef(null)
 
   useEffect(() => {
     const userData = localStorage.getItem('user')
@@ -24,10 +25,12 @@ export default function Navbar() {
       }
     }
 
-    // Close dropdown when clicking outside
+    // Close dropdowns when clicking outside
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsDropdownOpen(false)
+      }
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target) && !event.target.closest('.mobile-menu-btn')) {
         setIsMobileMenuOpen(false)
       }
     }
@@ -40,6 +43,7 @@ export default function Navbar() {
     localStorage.removeItem('user')
     setUser(null)
     setIsDropdownOpen(false)
+    setIsMobileMenuOpen(false)
     router.push('/login')
   }
 
@@ -53,8 +57,8 @@ export default function Navbar() {
           <div className="logo-text-wrapper" style={{ fontSize: '1.5rem', fontWeight: '800', color: '#0B3A64' }}>RENTAMETER<span style={{ color: '#ef4444' }}>.</span></div>
         </Link>
 
-        {/* NAVIGATION & PROFILE - Sisi Kanan */}
-        <div className="navbar-right" style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+        {/* DESKTOP NAVIGATION & PROFILE - Sisi Kanan */}
+        <div className="navbar-right desktop-only" style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
           <Link href="/search" className="nav-link" style={{ 
             textDecoration: 'none', 
             color: '#0B3A64', 
@@ -220,76 +224,112 @@ export default function Navbar() {
               )}
             </div>
           ) : (
-            <div ref={dropdownRef} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <div className="desktop-auth" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <Link href="/login" className="nav-link" style={{ textDecoration: 'none', color: '#4b5563', fontWeight: '500' }}>
-                  Masuk
-                </Link>
-                <Link href="/register" className="nav-button" style={{ 
-                  textDecoration: 'none', 
-                  backgroundColor: '#0B3A64', 
-                  color: 'white', 
-                  padding: '10px 20px', 
-                  borderRadius: '8px', 
-                  fontWeight: '600',
-                  transition: 'opacity 0.2s'
-                }} onMouseOver={(e) => e.currentTarget.style.opacity = '0.9'} onMouseOut={(e) => e.currentTarget.style.opacity = '1'}>
-                  Daftar
-                </Link>
-              </div>
-
-              {/* MOBILE AUTH HAMBURGER */}
-              <div className="mobile-auth" style={{ position: 'relative' }}>
-                <button 
-                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    padding: '8px',
-                    cursor: 'pointer',
-                    color: '#0B3A64',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <line x1="3" y1="18" x2="21" y2="18"></line>
-                  </svg>
-                </button>
-
-                {isMobileMenuOpen && (
-                  <div style={{
-                    position: 'absolute',
-                    top: '100%',
-                    right: 0,
-                    marginTop: '10px',
-                    width: '160px',
-                    backgroundColor: 'white',
-                    borderRadius: '12px',
-                    boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
-                    border: '1px solid #e5e7eb',
-                    padding: '8px 0',
-                    overflow: 'hidden',
-                    animation: 'fadeIn 0.2s ease',
-                    display: 'flex',
-                    flexDirection: 'column'
-                  }}>
-                    <Link href="/login" style={{ padding: '12px 16px', color: '#4b5563', textDecoration: 'none', fontWeight: '500', borderBottom: '1px solid #f3f4f6' }} onClick={() => setIsMobileMenuOpen(false)}>
-                      Masuk
-                    </Link>
-                    <Link href="/register" style={{ padding: '12px 16px', color: '#0B3A64', textDecoration: 'none', fontWeight: '600' }} onClick={() => setIsMobileMenuOpen(false)}>
-                      Daftar
-                    </Link>
-                  </div>
-                )}
-              </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <Link href="/login" className="nav-link" style={{ textDecoration: 'none', color: '#4b5563', fontWeight: '500' }}>
+                Masuk
+              </Link>
+              <Link href="/register" className="nav-button" style={{ 
+                textDecoration: 'none', 
+                backgroundColor: '#0B3A64', 
+                color: 'white', 
+                padding: '10px 20px', 
+                borderRadius: '8px', 
+                fontWeight: '600',
+                transition: 'opacity 0.2s'
+              }} onMouseOver={(e) => e.currentTarget.style.opacity = '0.9'} onMouseOut={(e) => e.currentTarget.style.opacity = '1'}>
+                Daftar
+              </Link>
             </div>
           )}
         </div>
 
+        {/* MOBILE MENU TOGGLE - Visible only on mobile */}
+        <div className="mobile-only" style={{ position: 'relative' }}>
+          <button 
+            className="mobile-menu-btn"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: '8px',
+              cursor: 'pointer',
+              color: '#0B3A64',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+
+          {/* UNIFIED MOBILE MENU DROPDOWN */}
+          {isMobileMenuOpen && (
+            <div ref={mobileMenuRef} style={{
+              position: 'absolute',
+              top: '100%',
+              right: 0,
+              marginTop: '10px',
+              width: '220px',
+              backgroundColor: 'white',
+              borderRadius: '12px',
+              boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
+              border: '1px solid #e5e7eb',
+              overflow: 'hidden',
+              animation: 'fadeIn 0.2s ease',
+              display: 'flex',
+              flexDirection: 'column'
+            }}>
+              
+              {user && (
+                <div style={{ padding: '16px', borderBottom: '1px solid #f3f4f6', backgroundColor: '#f8fafc' }}>
+                  <p style={{ margin: 0, fontSize: '0.9rem', fontWeight: '700', color: '#111827' }}>{user.name}</p>
+                  <p style={{ margin: 0, fontSize: '0.75rem', color: '#6b7280' }}>{user.email}</p>
+                </div>
+              )}
+
+              <Link href="/search" style={{ padding: '12px 16px', color: '#1f2937', textDecoration: 'none', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '10px', borderBottom: '1px solid #f3f4f6' }} onClick={() => setIsMobileMenuOpen(false)}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                Telusuri Alat
+              </Link>
+
+              {user ? (
+                <>
+                  <Link href="/profile" style={{ padding: '12px 16px', color: '#1f2937', textDecoration: 'none', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '10px', borderBottom: '1px solid #f3f4f6' }} onClick={() => setIsMobileMenuOpen(false)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    Profil & Riwayat
+                  </Link>
+                  <button onClick={handleLogout} style={{ padding: '12px 16px', color: '#ef4444', background: 'none', border: 'none', textAlign: 'left', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                      <polyline points="16 17 21 12 16 7"></polyline>
+                      <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    Keluar
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link href="/login" style={{ padding: '12px 16px', color: '#4b5563', textDecoration: 'none', fontWeight: '500', borderBottom: '1px solid #f3f4f6' }} onClick={() => setIsMobileMenuOpen(false)}>
+                    Masuk
+                  </Link>
+                  <Link href="/register" style={{ padding: '12px 16px', color: '#0B3A64', textDecoration: 'none', fontWeight: '600' }} onClick={() => setIsMobileMenuOpen(false)}>
+                    Daftar
+                  </Link>
+                </>
+              )}
+            </div>
+          )}
+        </div>
 
       </div>
       <style jsx>{`
@@ -298,42 +338,22 @@ export default function Navbar() {
           to { opacity: 1; transform: translateY(0); }
         }
         
-        .nav-link-text {
-          display: inline;
-        }
-        
-        .mobile-auth {
+        .mobile-only {
           display: none !important;
         }
 
         @media (max-width: 768px) {
-          .desktop-auth {
+          .desktop-only {
             display: none !important;
           }
-          .mobile-auth {
+          .mobile-only {
             display: block !important;
           }
           .navbar-logo .logo-text-wrapper {
             display: none !important;
           }
-          .profile-name-wrapper {
-            display: none !important;
-          }
-          .navbar-right {
-            gap: 12px !important;
-          }
-          .nav-link {
-            padding: 8px !important;
-          }
-          .nav-link-text {
-            display: none !important;
-          }
-          .nav-button {
-            padding: 8px 12px !important;
-            font-size: 0.85rem !important;
-          }
         }
       `}</style>
     </nav>
   )
-}
+}
