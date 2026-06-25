@@ -201,7 +201,7 @@ export default function PaymentSuccessPage() {
               background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
               padding: '32px', color: 'white'
             }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div className="contract-header-inner">
                 <div>
                   <h2 style={{ margin: '0 0 4px', fontSize: '1.5rem', fontWeight: '800' }}>RENTAMETER</h2>
                   <p style={{ margin: 0, fontSize: '0.875rem', opacity: 0.8 }}>Kontrak Digital Transaksi</p>
@@ -219,14 +219,14 @@ export default function PaymentSuccessPage() {
             </div>
 
             {/* Contract Body */}
-            <div style={{ padding: '32px' }}>
+            <div className="contract-body">
               
               {/* Transaction Detail */}
               <h3 style={{ fontSize: '1rem', fontWeight: '700', color: '#1f2937', marginBottom: '16px',
                 borderBottom: '2px solid #e5e7eb', paddingBottom: '8px' }}>
                 Detail Transaksi
               </h3>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '32px' }}>
+              <div className="contract-detail-grid">
                 <div>
                   <p style={{ fontSize: '0.75rem', color: '#6b7280', margin: '0 0 4px' }}>Tanggal</p>
                   <p style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1f2937', margin: 0 }}>{formatDate(transaction.date)}</p>
@@ -252,7 +252,7 @@ export default function PaymentSuccessPage() {
                 borderBottom: '2px solid #e5e7eb', paddingBottom: '8px' }}>
                 Informasi Pembeli
               </h3>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '32px' }}>
+              <div className="contract-detail-grid">
                 <div>
                   <p style={{ fontSize: '0.75rem', color: '#6b7280', margin: '0 0 4px' }}>Nama</p>
                   <p style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1f2937', margin: 0 }}>{transaction.buyerName}</p>
@@ -303,7 +303,7 @@ export default function PaymentSuccessPage() {
           </div>
 
           {/* ACTION BUTTONS */}
-          <div style={{ display: 'flex', gap: '16px', marginTop: '32px', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <div className="success-actions" style={{ display: 'flex', gap: '16px', marginTop: '32px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <button
               onClick={handleDownloadPDF}
               style={{
@@ -346,6 +346,43 @@ export default function PaymentSuccessPage() {
       </section>
 
       <Footer />
+
+      <style jsx>{`
+        .contract-header-inner {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+        }
+        .contract-body {
+          padding: 32px;
+        }
+        .contract-detail-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+          margin-bottom: 32px;
+        }
+        @media (max-width: 640px) {
+          .contract-header-inner {
+            flex-direction: column;
+            gap: 12px;
+          }
+          .contract-body {
+            padding: 20px;
+          }
+          .contract-detail-grid {
+            grid-template-columns: 1fr;
+          }
+          .success-actions {
+            flex-direction: column !important;
+          }
+          .success-actions button,
+          .success-actions a {
+            width: 100%;
+            justify-content: center;
+          }
+        }
+      `}</style>
     </>
   )
 }

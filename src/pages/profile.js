@@ -49,10 +49,10 @@ export default function ProfilePage() {
       <Navbar />
       <main style={{ minHeight: '80vh', backgroundColor: '#f8fafc', padding: '60px 0' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: '32px' }}>
+          <div className="profile-layout">
             
             {/* SIDEBAR */}
-            <div>
+            <div className="profile-sidebar">
               <div style={{ backgroundColor: 'white', padding: '30px', borderRadius: '16px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#0B3A64', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', fontWeight: '800', margin: '0 auto 16px' }}>
                   {user.name.charAt(0)}
@@ -91,7 +91,7 @@ export default function ProfilePage() {
             </div>
 
             {/* CONTENT */}
-            <div>
+            <div className="profile-content">
               <div style={{ backgroundColor: 'white', padding: '32px', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
                 <h3 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0B3A64" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
@@ -105,10 +105,10 @@ export default function ProfilePage() {
                 ) : (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                     {orders.map(order => (
-                      <div key={order.id} style={{ padding: '20px', border: '1px solid #f1f5f9', borderRadius: '12px', display: 'flex', gap: '20px', alignItems: 'center' }}>
-                        <img src={order.productImage} alt={order.productTitle} style={{ width: '80px', height: '80px', borderRadius: '8px', objectFit: 'cover' }} />
-                        <div style={{ flex: 1 }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                      <div key={order.id} className="order-item">
+                        <img src={order.productImage} alt={order.productTitle} style={{ width: '80px', height: '80px', borderRadius: '8px', objectFit: 'cover', flexShrink: 0 }} />
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', flexWrap: 'wrap', gap: '4px' }}>
                             <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#0B3A64' }}>{order.id}</span>
                             <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>{new Date(order.date).toLocaleDateString('id-ID')}</span>
                           </div>
@@ -117,7 +117,7 @@ export default function ProfilePage() {
                             Tipe: <span style={{ fontWeight: '600' }}>{order.mode === 'rent' ? `Sewa (${order.rentDays} Hari)` : 'Pembelian'}</span>
                           </p>
                         </div>
-                        <div style={{ textAlign: 'right' }}>
+                        <div className="order-price-status">
                           <div style={{ fontWeight: '800', color: '#0B3A64', marginBottom: '8px' }}>{formatRupiah(order.totalPrice)}</div>
                           <span style={{ 
                             padding: '4px 10px', 
@@ -142,6 +142,40 @@ export default function ProfilePage() {
         </div>
       </main>
       <Footer />
+
+      <style jsx>{`
+        .profile-layout {
+          display: grid;
+          grid-template-columns: 300px 1fr;
+          gap: 32px;
+        }
+        .order-item {
+          padding: 20px;
+          border: 1px solid #f1f5f9;
+          border-radius: 12px;
+          display: flex;
+          gap: 20px;
+          align-items: center;
+        }
+        .order-price-status {
+          text-align: right;
+          flex-shrink: 0;
+        }
+        @media (max-width: 900px) {
+          .profile-layout {
+            grid-template-columns: 1fr;
+          }
+        }
+        @media (max-width: 640px) {
+          .order-item {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+          .order-price-status {
+            text-align: left;
+          }
+        }
+      `}</style>
     </>
   )
 }

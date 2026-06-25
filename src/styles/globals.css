@@ -1245,6 +1245,22 @@ img {
     align-items: flex-start;
   }
 
+  .checkout-spec-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .checkout-title {
+    font-size: 1.8rem;
+  }
+
+}
+
+/* ===== SPEC GRID ===== */
+
+.checkout-spec-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
 }
 
 /* ========================================
@@ -1853,6 +1869,27 @@ img {
 
   .hero-title {
     font-size: 3.2rem;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .hero-section {
+    padding: 60px 0;
+  }
+
+  .hero-title {
+    font-size: 2.2rem;
+  }
+
+  .hero-description {
+    font-size: 0.95rem;
+  }
+
+  .hero-primary-btn {
+    width: 100%;
+    text-align: center;
   }
 
 }

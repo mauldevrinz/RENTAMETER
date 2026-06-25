@@ -62,7 +62,7 @@ export default function ProductDetailPage() {
 
       <section className="product-detail-page" style={{ padding: '80px 0' }}>
         <div className="container">
-          <div className="product-detail-wrapper" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '60px', alignItems: 'start' }}>
+          <div className="product-detail-wrapper">
             
             {/* LEFT IMAGE */}
             <div className="product-detail-image">

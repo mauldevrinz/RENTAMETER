@@ -6,6 +6,7 @@ export default function AdminDashboardSection() {
   const [complaints, setComplaints] = useState([])
   const [allChats, setAllChats] = useState([])
   const [selectedChatUser, setSelectedChatUser] = useState(null)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   // Fetch data from localStorage
   useEffect(() => {
@@ -72,7 +73,7 @@ export default function AdminDashboardSection() {
         />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.6fr 1.2fr', gap: '24px' }}>
+      <div style={{ display: 'grid', gap: '24px' }} className="admin-overview-bottom">
         {/* RECENT ACTIVITY TABLE */}
         <div style={{ backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden' }}>
           <div style={{ padding: '20px', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -243,7 +244,7 @@ export default function AdminDashboardSection() {
   )
 
   const renderChats = () => (
-    <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: '24px', height: '600px' }}>
+    <div className="admin-chat-layout">
       <div style={{ backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '20px' }}>
         <h3 style={{ fontSize: '1rem', fontWeight: '800', marginBottom: '20px' }}>Daftar Chat User</h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -360,8 +361,28 @@ export default function AdminDashboardSection() {
 
   return (
     <section style={{ minHeight: '100vh', backgroundColor: '#f8fafc', display: 'flex' }}>
+      {/* MOBILE SIDEBAR TOGGLE */}
+      <button 
+        className="admin-sidebar-toggle"
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      {/* SIDEBAR OVERLAY (mobile) */}
+      {isSidebarOpen && (
+        <div 
+          className="admin-sidebar-overlay" 
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* SIDEBAR */}
-      <div style={{ width: '280px', backgroundColor: '#0B3A64', color: 'white', padding: '40px 20px', display: 'flex', flexDirection: 'column', gap: '8px', position: 'sticky', top: 0, height: '100vh' }}>
+      <div className={`admin-sidebar ${isSidebarOpen ? 'admin-sidebar-open' : ''}`} style={{ backgroundColor: '#0B3A64', color: 'white', padding: '40px 20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <div style={{ marginBottom: '40px', textAlign: 'center' }}>
           <div style={{ fontSize: '1.2rem', fontWeight: '900', letterSpacing: '-0.5px' }}>ADMIN PANEL<span style={{ color: '#ef4444' }}>.</span></div>
           <div style={{ fontSize: '0.7rem', opacity: 0.6, textTransform: 'uppercase', marginTop: '4px' }}>Rentameter Industrial</div>
@@ -374,7 +395,7 @@ export default function AdminDashboardSection() {
         <SidebarLink active={activeTab === 'products'} onClick={() => setActiveTab('products')} label="Kelola Alat" icon="package" />
         <SidebarLink active={activeTab === 'users'} onClick={() => setActiveTab('users')} label="Daftar Pelanggan" icon="users" />
         
-        <div style={{ marginTop: 'auto', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div style={{ marginTop: 'auto', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <SidebarLink active={false} onClick={() => {}} label="Pengaturan" icon="settings" />
           <button 
             onClick={handleLogout}
@@ -404,9 +425,9 @@ export default function AdminDashboardSection() {
       </div>
 
       {/* MAIN CONTENT */}
-      <div style={{ flex: 1, padding: '40px' }}>
+      <div className="admin-main-content">
         {/* TOP BAR */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
+        <div className="admin-topbar">
           <div>
             <h1 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#0F172A' }}>
               {activeTab === 'overview' ? 'Selamat Datang, Admin' : (activeTab === 'transactions' ? 'Manajemen Transaksi' : (activeTab === 'chats' ? 'Log Percakapan User' : 'Laporan Pengaduan'))}
@@ -438,6 +459,94 @@ export default function AdminDashboardSection() {
         )}
       </div>
 
+      <style jsx>{`
+        .admin-sidebar-toggle {
+          display: none;
+          position: fixed;
+          top: 16px;
+          left: 16px;
+          z-index: 1100;
+          background: #0B3A64;
+          color: white;
+          border: none;
+          border-radius: 10px;
+          padding: 10px;
+          cursor: pointer;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .admin-sidebar-overlay {
+          display: none;
+        }
+        .admin-sidebar {
+          width: 280px;
+          position: sticky;
+          top: 0;
+          height: 100vh;
+          flex-shrink: 0;
+        }
+        .admin-main-content {
+          flex: 1;
+          padding: 40px;
+          min-width: 0;
+        }
+        .admin-topbar {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 40px;
+        }
+        .admin-overview-bottom {
+          grid-template-columns: 1.6fr 1.2fr;
+        }
+        .admin-chat-layout {
+          display: grid;
+          grid-template-columns: 300px 1fr;
+          gap: 24px;
+          height: 600px;
+        }
+        @media (max-width: 1024px) {
+          .admin-overview-bottom {
+            grid-template-columns: 1fr !important;
+          }
+          .admin-chat-layout {
+            grid-template-columns: 1fr !important;
+            height: auto !important;
+          }
+        }
+        @media (max-width: 768px) {
+          .admin-sidebar-toggle {
+            display: flex;
+          }
+          .admin-sidebar-overlay {
+            display: block;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1050;
+          }
+          .admin-sidebar {
+            position: fixed !important;
+            top: 0;
+            left: -300px;
+            height: 100vh !important;
+            z-index: 1060;
+            transition: left 0.3s ease;
+            overflow-y: auto;
+          }
+          .admin-sidebar-open {
+            left: 0 !important;
+          }
+          .admin-main-content {
+            padding: 20px;
+            padding-top: 70px;
+          }
+          .admin-topbar {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+          }
+        }
+      `}</style>
     </section>
   )
 }

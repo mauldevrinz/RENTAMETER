@@ -151,7 +151,7 @@ export default function CheckoutDetailPage() {
               {product.specs && product.specs.length > 0 && (
                 <div className="checkout-card">
                   <h3 className="checkout-card-title">Spesifikasi Produk</h3>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0' }}>
+                  <div className="checkout-spec-grid">
                     {product.specs.map((spec, index) => (
                       <div key={index} style={{
                         display: 'flex', justifyContent: 'space-between',
