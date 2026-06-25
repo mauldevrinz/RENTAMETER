@@ -145,7 +145,7 @@ export default function Navbar() {
                 </div>
 
                 {/* NAME & ARROW */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <div className="profile-name-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                   <span style={{ fontSize: '0.9rem', fontWeight: '600', color: '#1f2937' }}>
                     {user.name.split(' ')[0]}
                   </span>
@@ -314,6 +314,9 @@ export default function Navbar() {
             display: block !important;
           }
           .navbar-logo .logo-text-wrapper {
+            display: none !important;
+          }
+          .profile-name-wrapper {
             display: none !important;
           }
           .navbar-right {
