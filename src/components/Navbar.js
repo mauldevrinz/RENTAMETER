@@ -77,7 +77,7 @@ export default function Navbar() {
               <circle cx="11" cy="11" r="8"></circle>
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
-            Telusuri Alat
+            <span className="nav-link-text">Telusuri Alat</span>
           </Link>
 
           {user && user.role !== 'admin' && (
@@ -243,6 +243,29 @@ export default function Navbar() {
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(-10px); }
           to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .nav-link-text {
+          display: inline;
+        }
+
+        @media (max-width: 768px) {
+          .navbar-logo .logo-text-wrapper {
+            display: none !important;
+          }
+          .navbar-right {
+            gap: 12px !important;
+          }
+          .nav-link {
+            padding: 8px !important;
+          }
+          .nav-link-text {
+            display: none !important;
+          }
+          .nav-button {
+            padding: 8px 12px !important;
+            font-size: 0.85rem !important;
+          }
         }
       `}</style>
     </nav>
