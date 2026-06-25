@@ -10,6 +10,7 @@ import { useRouter } from 'next/router'
 export default function Navbar() {
   const [user, setUser] = useState(null)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const router = useRouter()
   const dropdownRef = useRef(null)
 
@@ -27,6 +28,7 @@ export default function Navbar() {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsDropdownOpen(false)
+        setIsMobileMenuOpen(false)
       }
     }
     document.addEventListener('mousedown', handleClickOutside)
@@ -218,21 +220,72 @@ export default function Navbar() {
               )}
             </div>
           ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <Link href="/login" className="nav-link" style={{ textDecoration: 'none', color: '#4b5563', fontWeight: '500' }}>
-                Masuk
-              </Link>
-              <Link href="/register" className="nav-button" style={{ 
-                textDecoration: 'none', 
-                backgroundColor: '#0B3A64', 
-                color: 'white', 
-                padding: '10px 20px', 
-                borderRadius: '8px', 
-                fontWeight: '600',
-                transition: 'opacity 0.2s'
-              }} onMouseOver={(e) => e.currentTarget.style.opacity = '0.9'} onMouseOut={(e) => e.currentTarget.style.opacity = '1'}>
-                Daftar
-              </Link>
+            <div ref={dropdownRef} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div className="desktop-auth" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <Link href="/login" className="nav-link" style={{ textDecoration: 'none', color: '#4b5563', fontWeight: '500' }}>
+                  Masuk
+                </Link>
+                <Link href="/register" className="nav-button" style={{ 
+                  textDecoration: 'none', 
+                  backgroundColor: '#0B3A64', 
+                  color: 'white', 
+                  padding: '10px 20px', 
+                  borderRadius: '8px', 
+                  fontWeight: '600',
+                  transition: 'opacity 0.2s'
+                }} onMouseOver={(e) => e.currentTarget.style.opacity = '0.9'} onMouseOut={(e) => e.currentTarget.style.opacity = '1'}>
+                  Daftar
+                </Link>
+              </div>
+
+              {/* MOBILE AUTH HAMBURGER */}
+              <div className="mobile-auth" style={{ position: 'relative' }}>
+                <button 
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    padding: '8px',
+                    cursor: 'pointer',
+                    color: '#0B3A64',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                  </svg>
+                </button>
+
+                {isMobileMenuOpen && (
+                  <div style={{
+                    position: 'absolute',
+                    top: '100%',
+                    right: 0,
+                    marginTop: '10px',
+                    width: '160px',
+                    backgroundColor: 'white',
+                    borderRadius: '12px',
+                    boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
+                    border: '1px solid #e5e7eb',
+                    padding: '8px 0',
+                    overflow: 'hidden',
+                    animation: 'fadeIn 0.2s ease',
+                    display: 'flex',
+                    flexDirection: 'column'
+                  }}>
+                    <Link href="/login" style={{ padding: '12px 16px', color: '#4b5563', textDecoration: 'none', fontWeight: '500', borderBottom: '1px solid #f3f4f6' }} onClick={() => setIsMobileMenuOpen(false)}>
+                      Masuk
+                    </Link>
+                    <Link href="/register" style={{ padding: '12px 16px', color: '#0B3A64', textDecoration: 'none', fontWeight: '600' }} onClick={() => setIsMobileMenuOpen(false)}>
+                      Daftar
+                    </Link>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>
@@ -248,8 +301,18 @@ export default function Navbar() {
         .nav-link-text {
           display: inline;
         }
+        
+        .mobile-auth {
+          display: none !important;
+        }
 
         @media (max-width: 768px) {
+          .desktop-auth {
+            display: none !important;
+          }
+          .mobile-auth {
+            display: block !important;
+          }
           .navbar-logo .logo-text-wrapper {
             display: none !important;
           }
